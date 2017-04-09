@@ -1,0 +1,16 @@
+#ignore data
+#===========#
+data
+data/*
+
+#OS generated files
+#==================#
+.DS_Store
+Thumbs.db
+.log
+.Trashes
+.Spotlight-V100
+
+#compiled files
+#==============#
+*.pyc
