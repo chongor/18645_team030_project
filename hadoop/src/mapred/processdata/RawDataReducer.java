@@ -12,7 +12,6 @@ import java.util.Map;
  * Created by Darren on 4/27/2017.
  */
 public class RawDataReducer extends Reducer<Text, Text, Text, Text> {
-
     /*
      * Inputs: author \t subreddit
      * Outputs: author sub1,count1;sub2,count2;sub3,count3; etc...
