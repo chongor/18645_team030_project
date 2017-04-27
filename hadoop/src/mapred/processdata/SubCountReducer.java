@@ -11,6 +11,10 @@ import java.io.IOException;
  */
 public class SubCountReducer extends Reducer<Text, IntWritable, Text, IntWritable> {
 
+    /*
+     * Inputs: subreddit 1
+     * Outputs: subreddit total_count
+     */
     @Override
     protected void reduce(Text key, Iterable<IntWritable> value, Context context) throws IOException, InterruptedException {
         int count = 0;

@@ -14,6 +14,10 @@ import java.io.IOException;
  */
 public class SubCountMapper extends Mapper<LongWritable, Text, Text, IntWritable> {
 
+    /*
+     * Inputs: raw reddit comments in JSON format
+     * Outputs: subreddit 1
+     */
     @Override
     protected void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
         try {

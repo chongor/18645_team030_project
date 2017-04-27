@@ -14,8 +14,8 @@ import java.util.Map;
 public class RawDataReducer extends Reducer<Text, Text, Text, Text> {
 
     /*
-     * Inputs: raw reddit comments in JSON format
-     * Outputs: author \t subreddit
+     * Inputs: author \t subreddit
+     * Outputs: author sub1,count1;sub2,count2;sub3,count3; etc...
      */
     @Override
     protected void reduce(Text key, Iterable<Text> value, Context context) throws IOException, InterruptedException {
