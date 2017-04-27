@@ -3,6 +3,11 @@
 data
 data/*
 
+#ignore reference pdfs
+#=====================#
+docs
+docs/*
+
 #OS generated files
 #==================#
 .DS_Store
@@ -13,4 +18,6 @@ Thumbs.db
 
 #compiled files
 #==============#
+hadoop/target
+hadoop/target/*
 *.pyc
