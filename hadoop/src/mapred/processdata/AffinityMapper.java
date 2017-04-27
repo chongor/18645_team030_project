@@ -59,7 +59,7 @@ public class AffinityMapper extends Mapper<Text, Text, Text, DoubleWritable> {
             //if sub exists in subTotalComments
             //calculate affinity score and write
             if(subTotalComments.containsKey(sub)){
-                Double aScore = e.getValue() / subTotalComments.get(sub);
+                Double aScore = e.getValue() / (double) subTotalComments.get(sub);
                 context.write(new Text(author), new DoubleWritable(aScore));
             }
         }
@@ -80,7 +80,7 @@ public class AffinityMapper extends Mapper<Text, Text, Text, DoubleWritable> {
             String[] sub_count = sub.split(";");
             subMap.put(sub_count[0], Integer.parseInt(sub_count[1]));
         }
-        return featureMap;
+        return subMap;
     }
 
 }
