@@ -2,17 +2,22 @@ package mapred.processdata;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.io.DoubleWritable;
+import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Mapper;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
+import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
  * Created by Darren on 4/27/2017.
  */
-public class AffinityMapper extends Mapper<Text, Text, Text, DoubleWritable> {
+public class AffinityMapper extends Mapper<LongWritable, Text, Text, DoubleWritable> {
 
     Map<String, Integer> subTotalComments;
 
@@ -25,26 +30,12 @@ public class AffinityMapper extends Mapper<Text, Text, Text, DoubleWritable> {
     @Override
     protected void setup(Context context) throws IOException, InterruptedException {
         super.setup(context);
-<<<<<<< HEAD
-        Configuration config = context.getConfiguration();
-        String[] lines = config.get("subTotalComments").split("\n");
-        
-        for (String line : lines){
-            String[] l = line.split("\t");
-
-            String sub = l[0];
-            Integer count = Integer.parseInt(l[1]);
-
-            subTotalComments.put(sub, count);
-        }
-=======
 
         //run if distributed
         //getSubDataFromCache(context);
 
         //run if not distributed
         getSubDataLocally(context);
->>>>>>> 6aed0c7c398cda1917107146254d0147a75d73dc
     }
 
     /*
@@ -52,13 +43,14 @@ public class AffinityMapper extends Mapper<Text, Text, Text, DoubleWritable> {
      * Output: author subreddit affinity_score
      */
     @Override
-    protected void map(Text key, Text value, Context context) throws IOException, InterruptedException {
+    protected void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
         String line = value.toString();
         String[] author_subVector = line.split("\\s+", 2);
         String author = author_subVector[0];
 
         Map<String, Integer> subs = parseSubVector(author_subVector[1]);
 
+        StringBuilder builder;
         // for each sub in the vector
         // check if it's a sub we care about from subTotalComments
         // if we do care about it, create an affinity score of it
@@ -68,8 +60,12 @@ public class AffinityMapper extends Mapper<Text, Text, Text, DoubleWritable> {
             //if sub exists in subTotalComments
             //calculate affinity score and write
             if(subTotalComments.containsKey(sub)){
-                Double aScore = e.getValue() / subTotalComments.get(sub);
-                context.write(new Text(author), new DoubleWritable(aScore));
+                Double aScore = e.getValue() / (double) subTotalComments.get(sub);
+
+                builder = new StringBuilder();
+                builder.append(author + "," + sub);
+
+                context.write(new Text(builder.toString()), new DoubleWritable(aScore));
             }
         }
 
@@ -84,12 +80,12 @@ public class AffinityMapper extends Mapper<Text, Text, Text, DoubleWritable> {
      */
     private Map<String, Integer> parseSubVector(String subVector) {
         Map<String, Integer> subMap = new HashMap<String, Integer>();
-        String[] subs = subVector.split(",");
+        String[] subs = subVector.split(";");
         for (String sub : subs) {
-            String[] sub_count = sub.split(";");
+            String[] sub_count = sub.split(",");
             subMap.put(sub_count[0], Integer.parseInt(sub_count[1]));
         }
-        return featureMap;
+        return subMap;
     }
 
     /**
@@ -122,13 +118,14 @@ public class AffinityMapper extends Mapper<Text, Text, Text, DoubleWritable> {
      * @throws IOException
      */
     private void loadSubData(File f) throws IOException{
+        subTotalComments = new HashMap<String, Integer>();
+
         try(BufferedReader br = new BufferedReader(new FileReader(f))) {
             String line;
             while((line = br.readLine()) != null) {
                 String[] l = line.split("\t");
                 String sub = l[0];
                 Integer count = Integer.parseInt(l[1]);
-
                 subTotalComments.put(sub, count);
             }
         }
