@@ -11,7 +11,7 @@ import java.io.IOException;
  */
 public class SubCountReducer extends Reducer<Text, IntWritable, Text, IntWritable> {
 
-    /*
+    /**
      * Inputs: subreddit 1
      * Outputs: subreddit total_count
      */

@@ -9,7 +9,11 @@ import org.apache.commons.cli.Parser;
 import java.util.ListIterator;
 
 /**
- * Created by Darren on 4/26/2017.
+ * A simplified command line option parser. Get the option value on the run.
+ * Pitfall is it ignores all unrecognized options.
+ *
+ * @author Dongzhen Piao
+ *
  */
 public class SimpleParser extends BasicParser{
 

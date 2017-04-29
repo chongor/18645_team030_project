@@ -14,7 +14,7 @@ import java.io.IOException;
  */
 public class RawDataMapper extends Mapper<LongWritable, Text, Text, Text> {
 
-    /*
+    /**
      * Inputs: raw reddit comments in JSON format
      * Outputs: author \t subreddit
      */
