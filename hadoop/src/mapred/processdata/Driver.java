@@ -62,8 +62,16 @@ public class Driver {
      * @throws Exception
      */
     private static void getAffinityScores(String input, String output, String data_filename) throws Exception {
-        EasyJob ejob = new EasyJob(new Configuration(), input, output,"Take preprocessed data and total sub comment counts and calculate affinity scores per (user, sub) pair.");
+        //These configuration settings are to be used by the mapper if hadoop is not distributed
+        Configuration conf = new Configuration();
+        conf.set("sub_data", data_filename);
+
+        EasyJob ejob = new EasyJob(conf, input, output,"Take preprocessed data and total sub comment counts and calculate affinity scores per (user, sub) pair.");
+
+        //This cache file is used by the mapper only if hadoop is distributed
         ejob.job.addCacheFile(new Path(data_filename).toUri());
+
+        ejob.setClasses(AffinityMapper.class, null, null);
         ejob.setMapOutputClasses(Text.class, DoubleWritable.class);
         ejob.run();
     }

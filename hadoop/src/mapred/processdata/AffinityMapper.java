@@ -28,20 +28,12 @@ public class AffinityMapper extends Mapper<Text, Text, Text, DoubleWritable> {
     @Override
     protected void setup(Context context) throws IOException, InterruptedException {
         super.setup(context);
-        URI[] localURIs = context.getCacheFiles();
-        File f = new File(localURIs[0]);
 
-        try(BufferedReader br = new BufferedReader(new FileReader(f))) {
-            String line;
-            while((line = br.readLine()) != null) {
-                String[] l = line.split("\t");
-                String sub = l[0];
-                Integer count = Integer.parseInt(l[1]);
+        //run if distributed
+        //getSubDataFromCache(context);
 
-                subTotalComments.put(sub, count);
-            }
-        }
-
+        //run if not distributed
+        getSubDataLocally(context);
     }
 
     /**
@@ -87,6 +79,48 @@ public class AffinityMapper extends Mapper<Text, Text, Text, DoubleWritable> {
             subMap.put(sub_count[0], Integer.parseInt(sub_count[1]));
         }
         return subMap;
+    }
+
+    /**
+     * When hadoop is running in single-node use this to get the subreddit data
+     * @param context
+     * @throws IOException
+     */
+    private void getSubDataLocally (Context context) throws IOException {
+        String sub_filename = context.getConfiguration().get("sub_data");
+        File f = new File(sub_filename);
+
+        loadSubData(f);
+    }
+
+    /**
+     * When hadoop is running in a distributed or semi-distributed environment use this to get the subreddit data
+     * @param context
+     * @throws IOException
+     */
+    private void getSubDataFromCache(Context context) throws IOException {
+        URI[] localURIs = context.getCacheFiles();
+        File f = new File(localURIs[0]);
+
+        loadSubData(f);
+    }
+
+    /**
+     * Read through the output of SubCount Mapreduce job and store in HashMap
+     * @param f
+     * @throws IOException
+     */
+    private void loadSubData(File f) throws IOException{
+        try(BufferedReader br = new BufferedReader(new FileReader(f))) {
+            String line;
+            while((line = br.readLine()) != null) {
+                String[] l = line.split("\t");
+                String sub = l[0];
+                Integer count = Integer.parseInt(l[1]);
+
+                subTotalComments.put(sub, count);
+            }
+        }
     }
 
 }
