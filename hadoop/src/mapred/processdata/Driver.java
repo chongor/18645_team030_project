@@ -62,8 +62,9 @@ public class Driver {
      * @throws Exception
      */
     private static void getAffinityScores(String input, String output, String data_filename) throws Exception {
-        EasyJob ejob = new EasyJob(new Configuration(), input, output,"Take preprocessed data and total sub comment counts and calculate affinity scores per (user, sub) pair.");
+        EasyJob ejob = new EasyJob(new Configuration(), input, output, "Take preprocessed data and total sub comment counts and calculate affinity scores per (user, sub) pair.");
         ejob.job.addCacheFile(new Path(data_filename).toUri());
+        ejob.setClasses(AffinityMapper.class, null, null);
         ejob.setMapOutputClasses(Text.class, DoubleWritable.class);
         ejob.run();
     }

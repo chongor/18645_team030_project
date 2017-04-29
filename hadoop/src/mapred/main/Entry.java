@@ -12,7 +12,10 @@ public class Entry {
 
         long start = System.currentTimeMillis();
 
-        if(program.equals("mapred/darren"))
+        if(program.equals("processData"))
+            mapred.processdata.Driver.main(args);
+
+        else if(program.equals("darren"))
             mapred.darren.Driver.main(args);
 
         else {
