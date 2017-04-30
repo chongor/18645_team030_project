@@ -14,7 +14,7 @@ public class Entry {
 
         if(program.equals("processData"))
             mapred.processdata.Driver.main(args);
-        
+
         else if(program.equals("darren"))
             mapred.darren.Driver.main(args);
 

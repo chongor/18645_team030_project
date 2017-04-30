@@ -37,6 +37,7 @@ public class Driver {
         EasyJob ejob = new EasyJob(new Configuration(), input, output,"Get total number of comments for each subreddit");
         ejob.setClasses(SubCountMapper.class, SubCountReducer.class, null);
         ejob.setMapOutputClasses(Text.class, IntWritable.class);
+        ejob.setReduceJobs(1);
         ejob.run();
     }
 

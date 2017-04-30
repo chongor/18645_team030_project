@@ -33,12 +33,25 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Entry.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="Entry.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/mapred/main/Entry.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="272">
-              <caret line="16" column="8" lean-forward="false" selection-start-line="16" selection-start-column="8" selection-end-line="16" selection-end-column="8" />
+            <state relative-caret-position="68">
+              <caret line="4" column="3" lean-forward="true" selection-start-line="4" selection-start-column="3" selection-end-line="4" selection-end-column="3" />
               <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="EasyJob.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/mapred/util/EasyJob.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="311">
+              <caret line="72" column="50" lean-forward="false" selection-start-line="72" selection-start-column="50" selection-end-line="72" selection-end-column="50" />
+              <folding>
+                <element signature="e#2475#2476#0" expanded="true" />
+                <element signature="e#2519#2520#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -46,16 +59,10 @@
       <file leaf-file-name="Driver.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/mapred/processdata/Driver.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="323">
-              <caret line="19" column="45" lean-forward="true" selection-start-line="19" selection-start-column="45" selection-end-line="19" selection-end-column="45" />
+            <state relative-caret-position="561">
+              <caret line="39" column="30" lean-forward="false" selection-start-line="39" selection-start-column="30" selection-end-line="39" selection-end-column="30" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <marker date="1493515240380" expanded="true" signature="877:1060" ph="/**...*/" />
-                <marker date="1493515240380" expanded="true" signature="1144:1434" ph="{...}" />
-                <marker date="1493515240380" expanded="true" signature="1440:1615" ph="/**...*/" />
-                <marker date="1493515240380" expanded="true" signature="1697:1999" ph="{...}" />
-                <marker date="1493515240380" expanded="true" signature="2005:2192" ph="/**...*/" />
-                <marker date="1493515240380" expanded="true" signature="2303:2957" ph="{...}" />
               </folding>
             </state>
           </provider>
@@ -68,7 +75,7 @@
               <caret line="37" column="10" lean-forward="false" selection-start-line="37" selection-start-column="10" selection-end-line="37" selection-end-column="10" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <marker date="1493515240406" expanded="true" signature="4256:4336" ph="{...}" />
+                <element signature="e#2711#2728#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -122,15 +129,15 @@
         <option value="$PROJECT_DIR$/src/mapred/util/SimpleParser.java" />
         <option value="$PROJECT_DIR$/src/mapred/util/Congfiguration.java" />
         <option value="$PROJECT_DIR$/src/mapred/util/OptimizedJob.java" />
-        <option value="$PROJECT_DIR$/src/mapred/util/EasyJob.java" />
         <option value="$PROJECT_DIR$/src/mapred/processdata/RawDataMapper.java" />
         <option value="$PROJECT_DIR$/src/mapred/processdata/RawDataReducer.java" />
         <option value="$PROJECT_DIR$/src/mapred/processdata/SubCountReducer.java" />
         <option value="$PROJECT_DIR$/pom.xml" />
         <option value="$PROJECT_DIR$/README.md" />
-        <option value="$PROJECT_DIR$/src/mapred/processdata/Driver.java" />
         <option value="$PROJECT_DIR$/src/mapred/processdata/AffinityMapper.java" />
         <option value="$PROJECT_DIR$/src/mapred/main/Entry.java" />
+        <option value="$PROJECT_DIR$/src/mapred/util/EasyJob.java" />
+        <option value="$PROJECT_DIR$/src/mapred/processdata/Driver.java" />
       </list>
     </option>
   </component>
@@ -629,7 +636,7 @@
           <caret line="71" column="23" lean-forward="false" selection-start-line="71" selection-start-column="23" selection-end-line="71" selection-end-column="23" />
           <folding>
             <element signature="imports" expanded="true" />
-            <marker date="1493515240406" expanded="true" signature="4256:4336" ph="{...}" />
+            <element signature="e#2711#2728#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -709,24 +716,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/mapred/util/EasyJob.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="600">
-          <caret line="67" column="6" lean-forward="true" selection-start-line="67" selection-start-column="6" selection-end-line="67" selection-end-column="6" />
-          <folding>
-            <element signature="imports" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/mapred/util/SimpleParser.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="425">
-          <caret line="36" column="50" lean-forward="false" selection-start-line="36" selection-start-column="50" selection-end-line="36" selection-end-column="50" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/README.md">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="102">
@@ -753,17 +742,27 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/mapred/processdata/Driver.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="323">
-          <caret line="19" column="45" lean-forward="true" selection-start-line="19" selection-start-column="45" selection-end-line="19" selection-end-column="45" />
+        <state relative-caret-position="561">
+          <caret line="39" column="30" lean-forward="false" selection-start-line="39" selection-start-column="30" selection-end-line="39" selection-end-column="30" />
           <folding>
             <element signature="imports" expanded="true" />
-            <marker date="1493515240380" expanded="true" signature="877:1060" ph="/**...*/" />
-            <marker date="1493515240380" expanded="true" signature="1144:1434" ph="{...}" />
-            <marker date="1493515240380" expanded="true" signature="1440:1615" ph="/**...*/" />
-            <marker date="1493515240380" expanded="true" signature="1697:1999" ph="{...}" />
-            <marker date="1493515240380" expanded="true" signature="2005:2192" ph="/**...*/" />
-            <marker date="1493515240380" expanded="true" signature="2303:2957" ph="{...}" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/mapred/main/Entry.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="68">
+          <caret line="4" column="3" lean-forward="true" selection-start-line="4" selection-start-column="3" selection-end-line="4" selection-end-column="3" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/mapred/util/SimpleParser.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="425">
+          <caret line="36" column="50" lean-forward="false" selection-start-line="36" selection-start-column="50" selection-end-line="36" selection-end-column="50" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -773,16 +772,19 @@
           <caret line="37" column="10" lean-forward="false" selection-start-line="37" selection-start-column="10" selection-end-line="37" selection-end-column="10" />
           <folding>
             <element signature="imports" expanded="true" />
-            <marker date="1493515240406" expanded="true" signature="4256:4336" ph="{...}" />
+            <element signature="e#2711#2728#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/mapred/main/Entry.java">
+    <entry file="file://$PROJECT_DIR$/src/mapred/util/EasyJob.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="272">
-          <caret line="16" column="8" lean-forward="false" selection-start-line="16" selection-start-column="8" selection-end-line="16" selection-end-column="8" />
-          <folding />
+        <state relative-caret-position="311">
+          <caret line="72" column="50" lean-forward="false" selection-start-line="72" selection-start-column="50" selection-end-line="72" selection-end-column="50" />
+          <folding>
+            <element signature="e#2475#2476#0" expanded="true" />
+            <element signature="e#2519#2520#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

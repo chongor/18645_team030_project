@@ -3,6 +3,9 @@ package mapred.util;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.mapred.ClusterStatus;
+import org.apache.hadoop.mapred.JobClient;
+import org.apache.hadoop.mapred.JobConf;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.Mapper;
 import org.apache.hadoop.mapreduce.Reducer;
@@ -26,6 +29,7 @@ public class EasyJob{
     public Job job;
     private List<String> inputs;
     private String output;
+    private int reduceJobs;
 
     public EasyJob(Configuration conf, String input, String output, String jobName) throws IOException {
 
@@ -33,6 +37,7 @@ public class EasyJob{
         this.inputs = new LinkedList<String>();
         this.inputs.add(input);
         this.output = output;
+        reduceJobs = 0;
     }
 
     /**
@@ -41,6 +46,10 @@ public class EasyJob{
      * @throws IOException
      */
     private void setup() throws IOException {
+        JobConf job_conf = new JobConf(this.job.getConfiguration());
+        JobClient job_client = new JobClient(job_conf);
+        ClusterStatus cluster_status = job_client.getClusterStatus();
+        int reducer_capacity = cluster_status.getMaxReduceTasks();
 
         this.job.setJarByClass(EasyJob.class);
 
@@ -57,8 +66,18 @@ public class EasyJob{
         FileSystem fs = FileSystem.get(URI.create(output), this.job.getConfiguration());
         fs.delete(new Path(output), true);
 
+        //setup number of reduce jobs
+        if (reduceJobs == 0)
+            this.job.setNumReduceTasks(reducer_capacity);
+        else
+            this.job.setNumReduceTasks(reduceJobs);
+
         this.job.setJarByClass(EasyJob.class);
 
+    }
+
+    public void setReduceJobs(int reduceJobs) {
+        this.reduceJobs = reduceJobs;
     }
 
     /**
