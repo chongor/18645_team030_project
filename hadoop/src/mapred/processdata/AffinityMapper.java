@@ -30,10 +30,10 @@ public class AffinityMapper extends Mapper<Text, Text, Text, DoubleWritable> {
         super.setup(context);
 
         //run if distributed
-        //getSubDataFromCache(context);
+        getSubDataFromCache(context);
 
         //run if not distributed
-        getSubDataLocally(context);
+        //getSubDataLocally(context);
     }
 
     /**
