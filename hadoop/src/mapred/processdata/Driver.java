@@ -23,7 +23,7 @@ public class Driver {
         //run the three jobs to get affinity scores
         getSubCounts(input, tmpdir + "/sub_counts");
         getRawData(input, tmpdir + "/process_data");
-        getAffinityScores(tmpdir + "/process_data", output, tmpdir + "/sub_counts");
+        getAffinityScores(tmpdir + "/process_data", output, tmpdir + "/sub_counts/part-r-00000");
 
     }
 
