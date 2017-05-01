@@ -19,11 +19,17 @@ public class Driver {
         String input = parser.get("input");
         String output = parser.get("output");
         String tmpdir = parser.get("tmpdir");
+        Integer mode = parser.getInt("mode");
+        String data_filename = tmpdir + "/sub_counts/part-r-00000";
+
+        if(mode == 1){
+            data_filename = "./part-r-00000";
+        }
 
         //run the three jobs to get affinity scores
         getSubCounts(input, tmpdir + "/sub_counts");
         getRawData(input, tmpdir + "/process_data");
-        getAffinityScores(tmpdir + "/process_data", output, tmpdir + "/sub_counts/part-r-00000");
+        getAffinityScores(tmpdir + "/process_data", output, Integer.toString(mode), data_filename);
 
     }
 
@@ -62,10 +68,11 @@ public class Driver {
      * @param data_filename
      * @throws Exception
      */
-    private static void getAffinityScores(String input, String output, String data_filename) throws Exception {
+    private static void getAffinityScores(String input, String output, String mode, String data_filename) throws Exception {
         //These configuration settings are to be used by the mapper if hadoop is not distributed
         Configuration conf = new Configuration();
         conf.set("sub_data", data_filename);
+        conf.set("mode", mode);
 
         EasyJob ejob = new EasyJob(conf, input, output,"Take preprocessed data and total sub comment counts and calculate affinity scores per (user, sub) pair.");
 
