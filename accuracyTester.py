@@ -2,6 +2,7 @@
 # Test framework to test recommendation engines
 
 import sys
+from src import comments, dataset, kNN, loadData, mongo
 
 # Input format is follows:
 # python accuracyTester [number] [input filename] [output filename]

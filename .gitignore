@@ -21,3 +21,5 @@ Thumbs.db
 hadoop/target
 hadoop/target/*
 *.pyc
+__pycache__
+__pycache__/*
