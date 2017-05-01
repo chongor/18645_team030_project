@@ -106,10 +106,19 @@ public class AffinityMapper extends Mapper<LongWritable, Text, Text, DoubleWrita
      * @throws IOException
      */
     private void getSubDataFromCache(Context context) throws IOException {
+        printFiles();
         URI[] localURIs = context.getCacheFiles();
         File f = new File(localURIs[0]);
 
         loadSubData(f);
+    }
+
+    private void printFiles(){
+        File dir = new File(".");
+        File[] files = dir.listFiles();
+        for(File f: files) {
+            System.out.println(f.getName());
+        }
     }
 
     /**
