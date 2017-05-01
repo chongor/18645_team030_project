@@ -24,3 +24,16 @@ Replace [xxxx] with relevant names to your use case.
 
 Utilized tmpdir only when temporary intermediate steps are required.
 - `hadoop jar subredditRecommendor.jar -program [program name] -input [input_file/s] -output [output_directory] -tmpdir tmp`
+
+
+#### How to run on AWS EMR
+`aws emr create-cluster --name "Test cluster Process Reddit Data" --release-label emr-5.4.0 \
+--service-role EMR_DefaultRole --ec2-attributes InstanceProfile=EMR_EC2_DefaultRole \
+--log-uri s3://team030.output.reddit --enable-debugging \
+--instance-groups
+InstanceGroupType=MASTER,InstanceCount=1,InstanceType=c1.medium
+InstanceGroupType=CORE,InstanceCount=4,InstanceType=c1.medium \
+--steps Type=CUSTOM_JAR,Jar=s3://team030.fastcode/subredditRecommendor.jar,Args=["-
+input","s3://team030.rc-2015-01/rc_2015_01","-output","s3://team030.output/rc-2015-01","-
+program","processData","-tmpdir","tmp"] \
+--auto-terminate`
