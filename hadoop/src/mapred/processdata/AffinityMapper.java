@@ -1,6 +1,7 @@
 package mapred.processdata;
 
 import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.DoubleWritable;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
@@ -31,11 +32,16 @@ public class AffinityMapper extends Mapper<LongWritable, Text, Text, DoubleWrita
     protected void setup(Context context) throws IOException, InterruptedException {
         super.setup(context);
 
-        //run if distributed
-        getSubDataFromCache(context);
+        Integer mode = Integer.parseInt(context.getConfiguration().get(
+                "mode"));
 
-        //run if not distributed
-        //getSubDataLocally(context);
+        if(mode == 1) {
+            //run if distributed
+            getSubDataFromCache(context);
+        } else {
+            //run if not distributed
+            getSubDataLocally(context);
+        }
     }
 
     /*
@@ -107,7 +113,7 @@ public class AffinityMapper extends Mapper<LongWritable, Text, Text, DoubleWrita
      */
     private void getSubDataFromCache(Context context) throws IOException {
         URI[] localURIs = context.getCacheFiles();
-        File f = new File(localURIs[0]);
+        File f = new File(localURIs[0].getPath());
 
         loadSubData(f);
     }
