@@ -32,6 +32,8 @@ def setup():
 
 #shorten data
 def prep_data(inFile, outFile):
+    program_name = "prepData";
+    start_time(program_name);
 
     #read data
     with open(inFile, 'r') as fin, open(outFile, 'w') as fout:
@@ -40,16 +42,18 @@ def prep_data(inFile, outFile):
             c = json.loads(line)
             author = c["author"]
             sub = c["subreddit"]
-            score = c["score"]
 
             #ignore '[deleted]' users
             if(author == "[deleted]"):
                 continue
 
-            fout.write(author + "," + sub + "," + str(score))
+            fout.write(author + "," + sub)
+
+    end_time(program_name)
+
 
 # preprocess the data into a format for algorithm
-def process_data(inFile, outFile):
+def get_raw_data(inFile, outFile):
 
     d = dict();
 
@@ -91,18 +95,16 @@ def process_data(inFile, outFile):
 
             fout.write(record)
 
-# STATS (doesn't calculate all of these)
-# unique users
-# unique subs
-# number of users in a sub
+
 # number of comments in a sub
-def stats(inFile, outFile):
+def get_sub_counts(inFile, outFile):
+    program_name = "getSubCounts";
+    start_time(program_name);
+
     #key: sub, value: set(users)
     #sub_users = dict();
-    #key: sub, value: [comment count, score count]
+    #key: sub, value: comment count
     sub_stats = dict();
-
-    print("begin stats")
 
     #read data
     with open(inFile, 'r') as fin:
@@ -117,125 +119,128 @@ def stats(inFile, outFile):
                 continue
 
             # ### SUB_STATS ###
-            # #if subreddit exists as key in sub_comments
-            # if(sub in sub_stats):
-            #     #increment the comment count
-            #     sub_stats[sub][0] += 1
-            #     #increment the score count
-            #     sub_stats[sub][1] += c["score"]
-            # #else initialize subreddit comment count
-            # else:
-            #     sub_stats[sub] = [1, c["score"]]
+            #if subreddit exists as key in sub_comments
+            if(sub in sub_stats):
+                #increment the comment count
+                sub_stats[sub] += 1
+            #else initialize subreddit comment count
+            else:
+                sub_stats[sub] = 1
 
             ### SUB_USER_BASE ###
-            # if sub exists
-            if sub in sub_stats:
-                # if unique author hasn't been subscribed
-                # subccribed the author
-                if author not in sub_stats[sub]:
-                    sub_stats[sub].add(author)
-            #create new sub if it doesn't exist with the author
-            else:
-                sub_stats[sub] = set(author)
+            # # if sub exists
+            # if sub in sub_stats:
+            #     # if unique author hasn't been subscribed
+            #     # subscribed the author
+            #     if author not in sub_stats[sub]:
+            #         sub_stats[sub].add(author)
+            # #create new sub if it doesn't exist with the author
+            # else:
+            #     sub_stats[sub] = set(author)
 
-    #get dict key = sub, value = # of unique users
-    sub_users = dict()
-    for sub in sub_stats:
-        if len(sub_stats[sub]) > 100:
-            sub_users[sub] = len(sub_stats[sub])
+    #get dict key = sub, value = # of total comments
+    # for sub in sub_stats:
+    #     if len(sub_stats[sub]) > 100:
+    #         sub_users[sub] = len(sub_stats[sub])
 
-    print("writing top subreddits")
-    print(len(sub_users))
-    sorted_subs = sorted(sub_users.items(), key=operator.itemgetter(1))
-    sorted_subs = sorted_subs[::-1]
-    print(len(sorted_subs))
-    sys.stdout.flush()
+    #sort the subs
+    # sorted_subs = sorted(sub_stats.items(), key=operator.itemgetter(1))
+    # sorted_subs = sorted_subs[::-1]
+
     with open(outFile, 'w') as fout:
-        #number of unique users per subreddit
-        for sub in sorted_subs:
-            record = sub[0] + "," + str(sub[1]) +"\n"
+        #sub and total comments in sub
+        for sub in sub_stats:
+            record = sub + "," + str(sub_stats[sub]) +"\n"
             fout.write(record)
 
-
-def affinity_output(inFile, outFile):
-
-        subs = dict();
-        d = dict();
-
-        #load sub data
-        with open("1k_popular_subs.txt", 'r') as dat:
-            for line in dat:
-                l = line.split(',')
-                sub = l[0]
-                total_comments = l[1]
-
-                #total comments for each sub
-                subs[sub] = int(total_comments)
-
-        #read raw
-        with open(inFile, 'r') as fin:
-            for line in fin:
-                #load json as a dictionary
-                c = json.loads(line)
-                author = c["author"]
-                subreddit = c["subreddit"]
-
-                #ignore '[deleted]' users
-                if(author == "[deleted]"):
-                    continue
-
-                #if author is in dictionary
-                if(author in d):
-                    #ignore subreddit if it's not in the top 1000
-                    if subreddit in subs:
-                        #if author already subscribed to this subreddit
-                        if(subreddit in d[author]):
-                            #increment number of comments in that sub
-                            d[author][subreddit] += 1
-                        #else create new subreddit subscription
-                        else:
-                            d[author][subreddit] = 1
-                #author doesn't exist, create new author in dict
-                #with subreddit subscription with count of 1
-                else:
-                    #only if the subreddit exists in top 1000
-                    if subreddit in subs:
-                        d[author] = {subreddit: 1}
-
-        with open(outFile, 'w') as fout:
-            for author in d:
-                record = author + ";"
-                for subreddit in d[author]:
-                    # record = author + ","
-                    #
-                    # count = d[author][subreddit]
-                    # total_comments = subs[subreddit]
-                    #
-                    # ascore = count / total_comments
-                    #
-                    # record += subreddit + "," + str(ascore) + "\n"
-                    record += subreddit + ","
-                record = record[:-1] + "\n"
-                fout.write(record)
+    end_time(program_name)
 
 
-def start_time():
+def get_affinity_scores(inFile, outFile, subFile):
+
+    program_name = "getAffinityScores";
+    start_time(program_name);
+
+    subs = dict();
+    d = dict();
+
+    #load sub data
+    with open(subFile, 'r') as dat:
+        for line in dat:
+            l = line.split(',')
+            sub = l[0]
+            total_comments = l[1]
+
+            #total comments for each sub
+            subs[sub] = int(total_comments)
+
+    #read raw
+    with open(inFile, 'r') as fin:
+        for line in fin:
+            #load json as a dictionary
+            c = json.loads(line)
+            author = c["author"]
+            subreddit = c["subreddit"]
+
+            #ignore '[deleted]' users
+            if(author == "[deleted]"):
+                continue
+
+            #if author is in dictionary
+            if(author in d):
+                if subreddit in subs:
+                    #if author already subscribed to this subreddit
+                    if(subreddit in d[author]):
+                        #increment number of comments in that sub
+                        d[author][subreddit] += 1
+                    #else create new subreddit subscription
+                    else:
+                        d[author][subreddit] = 1
+            #author doesn't exist, create new author in dict
+            #with subreddit subscription with count of 1
+            else:
+                if subreddit in subs:
+                    d[author] = {subreddit: 1}
+
+    with open(outFile, 'w') as fout:
+        for author in d:
+            record = author + ";"
+            for subreddit in d[author]:
+                record = author + ","
+
+                count = d[author][subreddit]
+                total_comments = subs[subreddit]
+
+                ascore = count / total_comments
+
+                record += subreddit + "," + str(ascore) + "\n"
+
+            fout.write(record)
+
+    end_time(program_name);
+
+def start_time(name):
     t = datetime.datetime.now().time()
-    print("job started: " + t.isoformat())
+    print(name + " started: " + t.isoformat())
 
-def end_time():
-    print("job done")
+def end_time(name):
+    print(name + " done")
     t = datetime.datetime.now().time()
-    print("job took: " + t.isoformat())
+    print(name + " took: " + t.isoformat())
 
 def main():
-    start_time()
+    start_time("prep.py")
+    sys.stdout.flush()
+
     files = setup()
-    #process_data(files[0], files[1])
-    affinity_output(files[0], files[1])
-    #stats(files[0], files[1])
-    #prep_data(files[0], files[1])
-    end_time()
+
+    get_sub_counts(files[0], "sub_counts");
+    sys.stdout.flush()
+    
+    get_affinity_scores(files[0], files[1], "sub_counts");
+    sys.stdout.flush()
+
+    end_time("prep.py")
 
 if __name__ == "__main__":
     main()
