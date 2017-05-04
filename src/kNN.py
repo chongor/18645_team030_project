@@ -1,19 +1,22 @@
 #! /usr/bin/env python
 
 import math
-from mongo import *
-from pymongo import *
-import dataset
+from loadData import subDict, listUsers, allSubreddits
+# import dataset
 import operator
 import numpy as np
 
+listAllSubreddits = list(allSubreddits)
+
 def createUserVector(username):
-	client = MongoClient()
-	user = queryUser(username, client)
-	unique_subs = list(subreddits(client))
+	# client = MongoClient()
+	# user = queryUser(username, client)
+	client = username
+	#unique_subs = list(subreddits(client))
+	unique_subs = listAllSubreddits
 	vector = [0]*len(unique_subs)
 	for i in range(len(unique_subs)):
-		if unique_subs[i]['name'] in user['subreddits']:
+		if unique_subs[i] in subDict[username]:
 			vector[i] = 10
 	return vector
 
@@ -27,31 +30,41 @@ def vectorDistance(user1, user2):
 	return np.linalg.norm(np.array(vector1) - np.array(vector2))
 
 def getNeighbors(username, k):
-	client = MongoClient()
+	#client = MongoClient()
 	distances = []
-	for user in allUsers(client):
+	for user in listUsers:
 		if len(distances) > k:
 			break
-		dist = vectorDistance(username, user['username'])
-		distances.append((user['username'], dist))
+		dist = vectorDistance(username, user)
+		distances.append((user, dist))
+		#dist = vectorDistance(username, user['username'])
+		#distances.append((user['username'], dist))
 	distances.sort(key=operator.itemgetter(1))
 	return distances
 
 def getRecommendedSubreddit(username):
-	client = MongoClient()
+	#client = MongoClient()
 	neighbors = getNeighbors(username, 70)
-	users = allUsersInArray([neighbor[0] for neighbor in neighbors], client)
-	banned = queryUser(username, client)['subreddits']
+	#users = allUsersInArray([neighbor[0] for neighbor in neighbors], client)
+	users = []
+	for neighbor in neighbors:
+		users.append(neighbor[0])
+	#banned = queryUser(username, client)['subreddits']
+	banned = subDict[username]
 	subredditFrequency = {}
-	totalsubs = [sub for user in users for sub in user['subreddits']]
+	#totalsubs = [sub for user in users for sub in user['subreddits']]
+	totalsubs = [sub for user in users for sub in subDict[user]]
 	subredditFrequency = {word : totalsubs.count(word) for word in set(totalsubs) if word not in banned}
 	return max(subredditFrequency, key=subredditFrequency.get)
 
 
 def main(username):
-	dataset.getComments(username)
+	# dataset.getComments(username)
 	return getRecommendedSubreddit(username)
 
 if __name__ == "__main__":
 	username = raw_input()
 	print(main(username))
+
+
+
