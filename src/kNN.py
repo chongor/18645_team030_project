@@ -3,7 +3,9 @@
 import math
 from loadData import subDict, listUsers, allSubreddits
 # import dataset
+import datetime
 import operator
+import sys
 import numpy as np
 
 listAllSubreddits = list(allSubreddits)
@@ -33,14 +35,12 @@ def getNeighbors(username, k):
 	#client = MongoClient()
 	distances = []
 	for user in listUsers:
-		if len(distances) > k:
-			break
 		dist = vectorDistance(username, user)
 		distances.append((user, dist))
 		#dist = vectorDistance(username, user['username'])
 		#distances.append((user['username'], dist))
 	distances.sort(key=operator.itemgetter(1))
-	return distances
+	return distances[:k]
 
 def getRecommendedSubreddit(username):
 	#client = MongoClient()
@@ -55,6 +55,7 @@ def getRecommendedSubreddit(username):
 	#totalsubs = [sub for user in users for sub in user['subreddits']]
 	totalsubs = [sub for user in users for sub in subDict[user]]
 	subredditFrequency = {word : totalsubs.count(word) for word in set(totalsubs) if word not in banned}
+
 	return max(subredditFrequency, key=subredditFrequency.get)
 
 
@@ -63,8 +64,14 @@ def main(username):
 	return getRecommendedSubreddit(username)
 
 if __name__ == "__main__":
-	username = raw_input()
+	username = sys.argv[1]
+	t = datetime.datetime.now().time()
+	s = "Start: " + t.isoformat()
+	print(s);
+	sys.stdout.flush()
+
 	print(main(username))
 
-
-
+	t = datetime.datetime.now().time()
+	s = "Finished: " + t.isoformat()
+	print(s)

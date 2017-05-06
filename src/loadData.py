@@ -1,6 +1,6 @@
 from collections import defaultdict
 
-file = open('../../rc_by_users.txt', 'r')
+file = open('../data/rc_by_users.txt', 'r')
 lines = file.readlines()
 last = lines[-1];
 subDict = defaultdict(list)
