@@ -1,18 +1,18 @@
 package mapred.darren;
 
-import org.apache.hadoop.io.DoubleWritable;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Mapper;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by Darren on 5/1/2017.
  */
-public class NeighborMapper extends Mapper<LongWritable, Text, Text, DoubleWritable>{
+public class NeighborMapper extends Mapper<LongWritable, Text, Text, Text>{
 
     /**
      * Compute partial distances between user pairs
@@ -50,7 +50,7 @@ public class NeighborMapper extends Mapper<LongWritable, Text, Text, DoubleWrita
             double distance = sum * sum;
 
             // Write the finalKey and partial distance
-            context.write(new Text(finalKey), new DoubleWritable(distance));
+            context.write(new Text(finalKey), new Text(new BigDecimal(distance).toPlainString()));
         }
 
 

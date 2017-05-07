@@ -6,6 +6,7 @@ import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Mapper;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 
 /**
  * Created by Darren on 5/6/2017.
@@ -29,10 +30,10 @@ public class SubMapper extends Mapper<LongWritable, Text, Text, Text>{
         String[] data = value.toString().split(",");
         String user = data[0];
         String sub = data[1];
-        String ascore = data[2];
+        double ascore = Double.parseDouble(data[2]);
 
         StringBuilder builder = new StringBuilder();
-        builder.append(user + "," + ascore);
+        builder.append(user + "," + new BigDecimal(ascore).toPlainString());
 
         context.write(new Text(sub), new Text(builder.toString()));
     }

@@ -4,6 +4,7 @@ import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Reducer;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -50,7 +51,7 @@ public class SubReducer extends Reducer<Text, Text, Text, Text>{
          */
         StringBuilder builder = new StringBuilder();
         for (Map.Entry<String, Double> e : ascores.entrySet()){
-            builder.append(e.getKey() + "," + e.getValue() + ";");
+            builder.append(e.getKey() + "," + new BigDecimal(e.getValue()).toPlainString() + ";");
             context.write(key, new Text(builder.toString()));
         }
 
