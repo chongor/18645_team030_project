@@ -29,13 +29,13 @@ public class SubReducer extends Reducer<Text, Text, Text, Text>{
     protected void reduce(Text key, Iterable<Text> value, Context context)
             throws IOException, InterruptedException{
 
-        Map<String, Double> ascores = new HashMap<String, Double>();
+        Map<String, BigDecimal> ascores = new HashMap<String, BigDecimal>();
 
         //value = <sub,ascore> pairs
         for(Text v : value) {
             String[] data = v.toString().split(",");
             String user = data[0];
-            Double ascore = Double.parseDouble(data[1]);
+            BigDecimal ascore = new BigDecimal(data[1]);
 
             ascores.put(user, ascore);
         }
@@ -50,8 +50,8 @@ public class SubReducer extends Reducer<Text, Text, Text, Text>{
          * Creates larger intermediate files and as a result more map-tasks run by hadoop
          */
         StringBuilder builder = new StringBuilder();
-        for (Map.Entry<String, Double> e : ascores.entrySet()){
-            builder.append(e.getKey() + "," + new BigDecimal(e.getValue()).toPlainString() + ";");
+        for (Map.Entry<String, BigDecimal> e : ascores.entrySet()){
+            builder.append(e.getKey() + "," + e.getValue().toPlainString() + ";");
             context.write(key, new Text(builder.toString()));
         }
 
