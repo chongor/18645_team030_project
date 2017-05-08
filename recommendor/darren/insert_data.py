@@ -8,10 +8,12 @@ import util
 from pymongo import*
 
 # insert a new user into the db
-def insertUser(username, subreddits, client):
+# with a list of subreddits and list of ascores for each subreddit
+def insertUser(username, subreddits, ascores, client):
     user = {
         "username": username,
         "subreddits": subreddits
+        "ascores": ascores
     }
     db = client.reddit
     collection = db.users
@@ -40,35 +42,39 @@ def getUser(username, client):
 
 
 # Get pairs with distance where either user of the pair
-# is the given username
-def getPairs(username, client):
+# is the given username, in sorted order (smallest to largest)
+def getSortedPairs(username, k, client):
     collection = client.reddit.pairs
-    pairs = collection.find_one({ "$or":[ {"username1": username}, {"username2": username} ]})
+    pairs = collection.find_one({ "$or":[ {"username1": username}, {"username2": username} ]}).sort("distance", pymongo.ASCENDING).limit(k)
     return pairs
 
 
 # Load the reddit users into mongoDb
-def loadUsers(inFile):
-    d = dict()
+def loadUsers(inFile, client):
+    subs = dict()
+    ascores = dict()
     # read data
     with open(inFile, 'r') as fin:
         for line in fin:
             data = line.split(",")
             user = data[0]
             sub = data[1]
+            ascore = data[2]
 
             if(user in d):
-                d[author].append(sub)
+                subs[author].append(sub)
+                ascores[author].append(ascore)
             else:
-                d[author] = list(sub)
+                subs[author] = list(sub)
+                ascores[author] = list(ascore)
 
     # Now that we have a list of subreddits per user
     for user in d:
-        insertUser(user, d[user])
+        insertUser(user, subs[user], ascores[user], client)
 
 
 # Load the reddit neighborhood data into mongoDb
-def loadPairs(inFile):
+def loadPairs(inFile, client):
     # read data
     with open(inFile, 'r') as fin:
         for line in fin:
@@ -76,12 +82,11 @@ def loadPairs(inFile):
             key = key_dist[0].split(" ")
             dist = key_dist[1]
 
-            insertPair(key[0], key[1], dist)
+            insertPair(key[0], key[1], dist, client)
 
 
 # load files
 def setup():
-
     if len(sys.argv) < 2:
         sys.exit("No input file given.")
     elif len(sys.argv) < 3:
@@ -97,11 +102,13 @@ def main():
     inFile = setup()
     mode = argv[2]
 
+    client = MongoClient()
+
     if(mode == 0):
-        loadUsers()
+        loadUsers(inFile, client)
         print("loaded users")
     elif(mode == 1):
-        loadPairs()
+        loadPairs(inFile, client)
         print("loaded user pairs")
 
     util.end_time(program)
