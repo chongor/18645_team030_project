@@ -48,15 +48,6 @@ public class SimilarityReducer extends Reducer<Text, Text, Text, Text> {
 		// context.write(key, new Text(builder.toString()));
 	}
 
-	// private Map<String, Integer> parseFeatureVector(String featureVector) {
-	// 	Map<String, Integer> featureMap = new HashMap<String, Integer>();
-	// 	String[] features = featureVector.split(";");
-	// 	for (String feature : features) {
-	// 		String[] word_count = feature.split(":");
-	// 		featureMap.put(word_count[0], Integer.parseInt(word_count[1]));
-	// 	}
-	// 	return featureMap;
-	// }
 	private StringBuilder parseFeatureVector(String featureVector, int k) {
 		StringBuilder featureMap = new StringBuilder();
 		String[] features = featureVector.split(";");
