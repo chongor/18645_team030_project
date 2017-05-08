@@ -66,12 +66,10 @@ def main(username):
 if __name__ == "__main__":
 	username = sys.argv[1]
 	t = datetime.datetime.now().time()
-	s = "Start: " + t.isoformat()
-	print(s);
+	print("Start: " + t.isoformat())
 	sys.stdout.flush()
 
 	print(main(username))
 
 	t = datetime.datetime.now().time()
-	s = "Finished: " + t.isoformat()
-	print(s)
+	print("Finished: " + t.isoformat())
