@@ -65,10 +65,6 @@ public class SimilarityMapper extends Mapper<LongWritable, Text, Text, Text> {
 
 		}
 
-		// Comparator<String> comparator = new ValueComparator<String, Integer>(similarityMap);
-		// TreeMap<String, Integer> result = new TreeMap<String, Integer>(comparator);
-		// result.putAll(similarityMap);
-
 
 		List list = new LinkedList(similarityMap.entrySet());
         Collections.sort(list, new Comparator() {
@@ -95,35 +91,6 @@ public class SimilarityMapper extends Mapper<LongWritable, Text, Text, Text> {
 		context.write(new Text(test_username), new Text(builder.toString()));
 
 
-
-
-
-		// ArrayList<String> hashtags = new ArrayList<String>();
-		// Set<String> hashtagsSet = hashtagsMap.keySet();
-		// for(String s: hashtagsSet){
-		// 	hashtags.add(s);
-		// }
-
-		// int numHashes = hashtags.size();
-		// int count1 = 0;
-		// int count2 = 0;
-		// int similarity = 0;
-		// String hash1 = null;
-		// String hash2 = null;
-		// for(int i = 0; i < numHashes ; i++){
-		// 	for(int j =0; j < numHashes;j++){
-		// 		hash1 = hashtags.get(i);
-		// 		hash2 = hashtags.get(j);
-		// 		count1 = hashtagsMap.get(hash1);
-		// 		count2 = hashtagsMap.get(hash2);
-		// 		similarity = count1*count2;
-		// 		if(hash1.compareTo(hash2) < 0)
-		// 			context.write(new Text(hash1 + "\t" + hash2), new IntWritable(similarity));
-		// 		else
-		// 			context.write(new Text(hash2 + "\t" + hash1), new IntWritable(similarity));
-		// 	}
-		// }
-		
 	}
 
 	/**

@@ -30,23 +30,21 @@ public class Driver {
 		String tmpdir = parser.get("tmpdir");
 
 
-		//below for running on aws emr
+		//below for running on aws emr, without using distributed cache
+
 		//Configuration conf = new Configuration();
 		//FileSystem fs = FileSystem.get(URI.create(trainingInput),conf);
 		// InputStream inStream = fs.open(new Path(trainingInput + "/trainingData10K.txt"));	
 
-		//for running locally
+		//for running locally, comment above lines and uncomment line below
 		//File fv_file = new File(trainingInput);
 
-		//if locally, replace inStream with fv_file
+		
  	 	String trainingUsers = null;
+ 	 	//if locally, replace inStream with fv_file
  	 	//String trainingUsers = new Scanner(inStream).useDelimiter("\\Z").next();
 
- 		//System.out.println("len of trainingUsers " + trainingUsers.length());
-
- 		//fs.copyToLocalFile(false,new Path(trainingInput + "/trainingData10K.txt"), new Path(tmpdir + "/"));
- 		//FileUtil.save(trainingUsers,tmpdir + "/trainingData10K.txt");
-		getRedditSimilarities(trainingInput+"/trainingData1m.txt",trainingUsers, testInput, output);
+		getRedditSimilarities(trainingInput+"/trainingData1m.txt", testInput, output);
 	}
 
 
@@ -153,12 +151,12 @@ public class Driver {
 	}
 
 	private static void getRedditSimilarities(
-			String fv_path,String userVectors, String input, String output) throws IOException,
+			String fv_path, String input, String output) throws IOException,
 			ClassNotFoundException, InterruptedException {
-		// Share the feature vector of #job to all mappers.
 		Configuration conf = new Configuration();
 		DistributedCache.addCacheFile(new Path(fv_path).toUri(), conf);
 		System.out.println("Added file to cache");
+		//if using config, add vectors as an argument to this function passed by main
 		//conf.set("userVectors", userVectors);
 		
 		Optimizedjob job = new Optimizedjob(conf, input, output,

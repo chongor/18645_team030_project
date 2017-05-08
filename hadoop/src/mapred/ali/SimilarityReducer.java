@@ -20,32 +20,11 @@ public class SimilarityReducer extends Reducer<Text, Text, Text, Text> {
 		for(Text t : value){
 			line = t.toString();
 		}
-		// String[] test_user_featureVector = line.split("\\s+", 2);
-		// StringBuilder builder = new StringBuilder();
+		
 		StringBuilder training_users_map = parseFeatureVector(line,k);
-		// for(Map.Entry<String,Integer> e : training_users_map.entrySet()){
-		// 	if (k>0){
-		// 		builder.append(e.getKey() + ":" + e.getValue() + ";");
-		// 		k--;
-		// 	}
-		// }
+		
 		context.write(key, new Text(training_users_map.toString()));
 
-		// int count = 0;
-		// for(IntWritable val : value){
-		// 	count += val.get();
-		// }
-		// context.write(key,new IntWritable(count));
-		/*
-		 * We're serializing the word cooccurrence count as a string of the following form:
-		 * 
-		 * word1:count1;word2:count2;...;wordN:countN;
-		 */
-		// StringBuilder builder = new StringBuilder();
-		// for (Map.Entry<String, Integer> e : counts.entrySet()) 
-		// 	builder.append(e.getKey() + ":" + e.getValue() + ";");
-		
-		// context.write(key, new Text(builder.toString()));
 	}
 
 	private StringBuilder parseFeatureVector(String featureVector, int k) {
