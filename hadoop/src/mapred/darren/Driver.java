@@ -21,8 +21,6 @@ public class Driver {
         //run the two jobs to get reddit neighborhood
         getSubs(input, tmpdir + "/subs");
         getNeighborhood(tmpdir + "/subs", output);
-
-
     }
 
     private static void getSubs(String input, String output) throws Exception {
