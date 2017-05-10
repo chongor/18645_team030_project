@@ -94,7 +94,7 @@ def get_raw_data(inFile, outFile):
             record = record[:-1] + "\n"
 
             fout.write(record)
-
+            
 
 # number of comments in a sub
 def get_sub_counts(inFile, outFile):
@@ -164,7 +164,7 @@ def get_affinity_scores(inFile, outFile, subFile):
     subs = dict();
     d = dict();
 
-    #load sub data
+    #load sub count data
     with open(subFile, 'r') as dat:
         for line in dat:
             l = line.split(',')
@@ -204,29 +204,34 @@ def get_affinity_scores(inFile, outFile, subFile):
 
     with open(outFile, 'w') as fout:
         for author in d:
-            record = author + ";"
             for subreddit in d[author]:
                 record = author + ","
-
+                # get the # comments user made in sub
                 count = d[author][subreddit]
+                # get the total # comments in that sub
                 total_comments = subs[subreddit]
-
+                # calculate the affinity score
                 ascore = count / total_comments
 
-                record += subreddit + "," + str(ascore) + "\n"
-
-            fout.write(record)
+                # we want to ignore any ascores that are 1.0
+                # as that means they are the only user in that sub
+                if ascore < 1.0:
+                    record += subreddit + "," + str(ascore) + "\n"
+                    fout.write(record)
 
     end_time(program_name);
+
 
 def start_time(name):
     t = datetime.datetime.now().time()
     print(name + " started: " + t.isoformat())
 
+
 def end_time(name):
     print(name + " done")
     t = datetime.datetime.now().time()
     print(name + " took: " + t.isoformat())
+
 
 def main():
     start_time("prep.py")
@@ -236,11 +241,12 @@ def main():
 
     get_sub_counts(files[0], "sub_counts");
     sys.stdout.flush()
-    
+
     get_affinity_scores(files[0], files[1], "sub_counts");
     sys.stdout.flush()
 
     end_time("prep.py")
+
 
 if __name__ == "__main__":
     main()
