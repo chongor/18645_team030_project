@@ -146,11 +146,10 @@ def recommendorOne(client):
     knn = getKNN_one(username, client)
     neighbors = getListOfUsers(knn["neighbors"], client)
     recommendations = weightedSum(userObj, neighbors, client)[:n]
-    
+
     #print(recommendations)
     for sub in recommendations:
         print(sub[0])
-
 
 
 # recommendation where all distances have been computed
