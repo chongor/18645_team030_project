@@ -12,26 +12,8 @@ import sys
 import decimal
 
 
-# get user to recommend subreddit for
-def setup():
-    k = 70
-    n = 1
-
-    if len(sys.argv) < 2:
-        sys.exit("No user given.")
-    elif len(sys.argv) == 2:
-        print("Using default K value, 70")
-        print("Using default n value, 1")
-    elif len(sys.argv) == 3:
-        k = sys.argv[2]
-        print("Using default n value, 1")
-    elif  len(sys.argv) == 4:
-        k = sys.argv[2]
-        n = sys.argv[3]
-    else:
-        print("Extra options given and will be ignored.")
-
-    return [sys.argv[1], int(k), int(n)]
+# Program input: program_name username k n
+# k and n is optional and only applicable to program "two"
 
 
 # Get a user
@@ -61,13 +43,45 @@ def getSortedPairs(username, k, client):
     return list(pairs)
 
 
+# get the precomputed knn of given user
+def getKNN_one(username, client):
+    collection = client.reddit.kneighbors
+    neighbors = collection.find_one({"username": username})
+    print(neighbors)
+
+    return neighbors
+
+
 # get the k nearest neighbors
-def getKNN(username, k, client):
+def getKNN_two(username, k, client):
     #get the nearest k pairs
     pairs = getSortedPairs(username, k, client)
     print("Found pairs: " + pairs[0]["username1"] + "\t" + pairs[0]["username2"])
 
     return pairs
+
+
+# recommend sub based on neighbors given
+# recommend n top subreddit recommendations
+def weightedSum(userObj, user_list, client):
+    other_subs = dict()
+
+    # calculated weighted sums
+    for neighbor in user_list:
+        name = neighbor["username"]
+        for i in range(len(neighbor["subreddits"])):
+            sub = neighbor["subreddits"][i]
+            if sub not in userObj["subreddits"]:
+                if sub in other_subs:
+                    other_subs[sub] += decimal.Decimal(neighbor["ascores"][i])
+                else:
+                    other_subs[sub] = decimal.Decimal(neighbor["ascores"][i])
+
+    # sort other_subs in descending order
+    other_subs = sorted(other_subs.items(), key=operator.itemgetter(1), reverse=True)
+
+    # recommend top n subs
+    return other_subs
 
 
 # recommend sub based on the neighbors given
@@ -107,28 +121,91 @@ def recommend(userObj, neighbors, n, client):
     other_subs = sorted(other_subs.items(), key=operator.itemgetter(1), reverse=True)
 
     # recommend top n subs
-    return other_subs[:n]
+    return weightedSum(userObj, user_list, client)[:n]
 
 
-def main():
-    program = "Recommending..."
-    util.start_time(program);
+# recommendation based on precomputed k nearest neighbors
+def recommendorOne(client):
 
-    inputs = setup()
-    username = inputs[0]
-    k = inputs[1]
-    n = inputs[2]
+    print("Running Recommendor One")
 
-    client = pymongo.MongoClient()
+    n = 1
 
-    user = getUser(username, client)
-    neighbors = getKNN(username, k, client)
-    recommendations = recommend(user, neighbors, n, client)
+    if len(sys.argv) < 3:
+        sys.exit("No user given.")
+    elif len(sys.argv) == 3:
+        print("Using default n value, 1")
+    elif len(sys.argv) == 4:
+        n = int(sys.argv[3])
+    else:
+        print("Extra options given and will be ignored.")
 
+    username = sys.argv[2]
+
+    userObj = getUser(username, client)
+    knn = getKNN_one(username, client)
+    neighbors = getListOfUsers(knn["neighbors"], client)
+    recommendations = weightedSum(userObj, neighbors, client)[:n]
+    
+    #print(recommendations)
     for sub in recommendations:
         print(sub[0])
 
-    util.end_time(program)
+
+
+# recommendation where all distances have been computed
+# i.e. entire reddit neighborhood has been calculated
+def recommendorTwo(client):
+
+    print("Running Recommendor Two")
+
+    k = 70
+    n = 1
+
+    if len(sys.argv) < 3:
+        sys.exit("No user given.")
+    elif len(sys.argv) == 3:
+        print("Using default K value, 70")
+        print("Using default n value, 1")
+    elif len(sys.argv) == 4:
+        k = sys.argv[3]
+        print("Using default n value, 1")
+    elif  len(sys.argv) == 5:
+        k = sys.argv[3]
+        n = sys.argv[4]
+    else:
+        print("Extra options given and will be ignored.")
+
+    username = sys.argv[2]
+    k = int(k)
+    n = int(n)
+
+    userObj = getUser(username, client)
+    pairs = getKNN_two(username, k, client)
+    recommendations = recommend(userObj, pairs, n, client)
+
+    #print(recommendations)
+    for sub in recommendations:
+        print(sub[0])
+
+
+
+def main():
+    program_name = "Recommending..."
+    util.start_time(program_name);
+
+    if len(sys.argv) < 2:
+        sys.exit("No program given")
+
+    program = sys.argv[1]
+    client = pymongo.MongoClient()
+
+    if program == "one":
+        recommendorOne(client)
+    elif program == "two":
+        recommendorTwo(client)
+
+    util.end_time(program_name)
 
 if __name__ == "__main__":
     main()

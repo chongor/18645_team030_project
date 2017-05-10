@@ -37,6 +37,18 @@ def insertPair(username1, username2, distance, client):
     return pair_id
 
 
+# insert a new username with k nearest neighbors
+def insert_knn(username, neighbors, client):
+    knn = {
+        "username": username,
+        "neighbors": neighbors
+    }
+    db = client.reddit
+    collection = db.kneighbors
+    knn_id = collection.insert_one(knn).inserted_id
+    return knn_id
+
+
 # Load the reddit users with affinity scores into mongoDb
 def loadUsers(inFile, client):
     subs = dict()
@@ -73,6 +85,21 @@ def loadPairs(inFile, client):
             insertPair(key[0], key[1], dist, client)
 
 
+# load the knn data into mongoDB
+def loadKnn(inFile, client):
+    # read data
+    with open(inFile, 'r') as fin:
+        for line in fin:
+            splitOne = line.split("\t")
+            username = splitOne[0]
+            neighbors = []
+
+            splitTwo = splitOne[1].strip().split(";")
+            for user in splitTwo[:-1]:
+                neighbors.append(user.split(":")[0])
+
+            insert_knn(username, neighbors, client)
+
 # load files
 def setup():
     if len(sys.argv) < 2:
@@ -99,6 +126,11 @@ def main():
     elif(mode == "neighborhood"):
         loadPairs(inFile, client)
         print("loaded user pairs")
+    elif(mode == "knn"):
+        loadKnn(inFile, client)
+        print("loaded k neighbors")
+    else:
+        print("no known mode specified")
 
     util.end_time()
 
