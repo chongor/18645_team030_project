@@ -4,8 +4,8 @@
 
 # our own libraries
 # if using accuracy tester comment out line 7 and uncomment line 8
-from . import util
-#import util
+#from . import util
+import util
 
 # python libraries
 import pymongo
@@ -191,6 +191,29 @@ def recommendorTwo(client):
     for sub in recommendations:
         print(sub[0])
 
+
+# use for accuracy testing of Distributed Cache implementation
+def one(username, n):
+    client = pymongo.MongoClient()
+
+    userObj = getUser(username, client)
+    knn = getKNN_one(username, client)
+    neighbors = getListOfUsers(knn["neighbors"], client)
+    recommendations = weightedSum(userObj, neighbors, client)[:n]
+
+    return recommendations
+
+
+# use for accuracy testing of All Pairs implemenation
+# k default is 10
+def two(username, n, k=10):
+    client = pymongo.MongoClient()
+    userObj = getUser(username, client)
+    pairs = getKNN_two(username, k, client)
+    sys.stdout.flush()
+    recommendations = recommend(userObj, pairs, n, client)
+    sys.stdout.flush()
+    return recommendations
 
 
 def main():

@@ -1,14 +1,4 @@
-A recommendation system for subreddits using the K Nearest Neighbors algorithm between users and subscribed subreddits.
+# Modified Sequential Source Code
+This contains the modified version of the source code that we utilized as the base sequential code.
 
-Coming soon:
-
-A load balancing mechanism using a Gearman Job Server to distribute jobs among a group of nodes.
-
-The kNN algorithm, but multithreaded.
-
-A web API.
-
-A second option to get recommended subreddits using Jaccard Similarity. 
-
-Blog Posts.
-
+The main difference is that the sequential code does not communicate with a database and instead takes in the raw data directly for recommendation calculations.  The underlying algorithm is unchanged.

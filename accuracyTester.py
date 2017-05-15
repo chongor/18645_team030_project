@@ -75,7 +75,8 @@ def DC(inFile):
     with open(inFile, 'r') as fin:
         # read in a test user
         for line in fin:
-            data = line.split(",")
+            data = line.split("\t")
+            user = data[0]
 
             subs = set()
 
@@ -84,7 +85,7 @@ def DC(inFile):
                 subs.add(pair.split(",")[0])
 
             # get an extra 5 subs to recommend
-            recommendations = kNN.main(data[0],len(subs)+5)
+            recommendations = recommendor.one(data[0],len(subs)+5)
 
             # check and see if test sub is in the list of recommended subs
             for sub in subs:
@@ -110,10 +111,10 @@ def allPairs(inFile):
     # open file
     with open(inFile, 'r') as fin:
         for line in fin:
-            data = line.strip().slit(",")
+            data = line.strip().split(",")
 
-            #need to rewrite
-            recommendations = recommendor.main()
+            # get an extra 5 subs to recommend
+            recommendations = recommendor.two(data[0],6)
 
             if data[1] in recommendations:
                 success += 1
@@ -140,7 +141,7 @@ def main():
     elif(program == 2):
         allPairs(inFile)
     #or run on all
-    elif(program == 4):
+    elif(program == 3):
         sequential("user_testing_1k")
         DC("user_testing_1k")
         allPairs("affinity_testing_1k")

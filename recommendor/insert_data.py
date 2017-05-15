@@ -5,8 +5,8 @@
 
 # our own library
 # if using accuracy tester comment out line 8 and uncomment line 9
-from . import util
-#import util
+#from . import util
+import util
 
 #python libraries
 from pymongo import *
