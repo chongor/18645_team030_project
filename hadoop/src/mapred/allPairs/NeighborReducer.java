@@ -1,4 +1,4 @@
-package mapred.darren;
+package mapred.allPairs;
 
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Reducer;

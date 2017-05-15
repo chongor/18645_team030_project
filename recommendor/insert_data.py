@@ -4,7 +4,9 @@
 # and inserts it into a mongodb instance
 
 # our own library
-import util
+# if using accuracy tester comment out line 8 and uncomment line 9
+from . import util
+#import util
 
 #python libraries
 from pymongo import *

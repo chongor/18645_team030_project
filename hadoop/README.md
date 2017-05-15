@@ -25,6 +25,9 @@ Replace [xxxx] with relevant names to your use case.
 Utilized tmpdir only when temporary intermediate steps are required.
 - `hadoop jar subredditRecommendor.jar -program [program name] -input [input_file/s] -output [output_directory] -tmpdir tmp`
 
+Two programs exist:
+- "processData"
+- "allPairs"
 
 #### How to run on AWS EMR in general
 `aws emr create-cluster --name "Test cluster Process Reddit Data" --release-label emr-5.4.0 \

@@ -1,7 +1,7 @@
 #! /usr/bin/env python
 
 import math
-from loadData import subDict, listUsers, allSubreddits
+from .loadData import subDict, listUsers, allSubreddits
 # import dataset
 import datetime
 import operator
@@ -56,20 +56,26 @@ def getRecommendedSubreddit(username):
 	totalsubs = [sub for user in users for sub in subDict[user]]
 	subredditFrequency = {word : totalsubs.count(word) for word in set(totalsubs) if word not in banned}
 
-	return max(subredditFrequency, key=subredditFrequency.get)
+	#return max(subredditFrequency, key=subredditFrequency.get)
+	return sorted(subredditFrequency, key=subredditFrequency.get)
 
 
-def main(username):
+def main(username, n):
 	# dataset.getComments(username)
-	return getRecommendedSubreddit(username)
+	#return getRecommendedSubreddit(username)
+	subreddit = getRecommendedSubreddit(username)
+	return subreddit[:n]
+
 
 if __name__ == "__main__":
 	username = sys.argv[1]
+	n = sys.argv[2]
+
 	t = datetime.datetime.now().time()
 	print("Start: " + t.isoformat())
 	sys.stdout.flush()
 
-	print(main(username))
+	print(main(username, n))
 
 	t = datetime.datetime.now().time()
 	print("Finished: " + t.isoformat())

@@ -15,8 +15,8 @@ public class Entry {
         if(program.equals("processData"))
             mapred.processdata.Driver.main(args);
 
-        else if(program.equals("darren"))
-            mapred.darren.Driver.main(args);
+        else if(program.equals("allPairs"))
+            mapred.allPairs.Driver.main(args);
 
         else {
             System.out.println("Unknown program!");

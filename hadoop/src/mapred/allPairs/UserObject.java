@@ -1,4 +1,4 @@
-package mapred.darren;
+package mapred.allPairs;
 
 /**
  * Created by Darren on 5/6/2017.

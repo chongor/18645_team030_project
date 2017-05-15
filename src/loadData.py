@@ -1,6 +1,6 @@
 from collections import defaultdict
 
-file = open('../data/rc_by_users.txt', 'r')
+file = open('./data/training/user_training_1m', 'r')
 lines = file.readlines()
 last = lines[-1];
 subDict = defaultdict(list)
@@ -15,10 +15,10 @@ for rawLine in lines:
 	subredditsIndex = rawLine.find(';')
 	#remove new line \r\n
 	if(rawLine is not last):
-		lastIndex = len(rawLine)-2		
+		lastIndex = len(rawLine)-2
 	else:
 		lastIndex = len(rawLine)
-	
+
 	listSubredditsRaw = rawLine[subredditsIndex+1:lastIndex]
 	listSubreddits = listSubredditsRaw.split(',')
 

@@ -3,7 +3,9 @@
 # Works based off
 
 # our own libraries
-import util
+# if using accuracy tester comment out line 7 and uncomment line 8
+from . import util
+#import util
 
 # python libraries
 import pymongo
