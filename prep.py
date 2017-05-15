@@ -94,16 +94,13 @@ def get_raw_data(inFile, outFile):
             record = record[:-1] + "\n"
 
             fout.write(record)
-            
+
 
 # number of comments in a sub
 def get_sub_counts(inFile, outFile):
     program_name = "getSubCounts";
     start_time(program_name);
 
-    #key: sub, value: set(users)
-    #sub_users = dict();
-    #key: sub, value: comment count
     sub_stats = dict();
 
     #read data
@@ -126,26 +123,6 @@ def get_sub_counts(inFile, outFile):
             #else initialize subreddit comment count
             else:
                 sub_stats[sub] = 1
-
-            ### SUB_USER_BASE ###
-            # # if sub exists
-            # if sub in sub_stats:
-            #     # if unique author hasn't been subscribed
-            #     # subscribed the author
-            #     if author not in sub_stats[sub]:
-            #         sub_stats[sub].add(author)
-            # #create new sub if it doesn't exist with the author
-            # else:
-            #     sub_stats[sub] = set(author)
-
-    #get dict key = sub, value = # of total comments
-    # for sub in sub_stats:
-    #     if len(sub_stats[sub]) > 100:
-    #         sub_users[sub] = len(sub_stats[sub])
-
-    #sort the subs
-    # sorted_subs = sorted(sub_stats.items(), key=operator.itemgetter(1))
-    # sorted_subs = sorted_subs[::-1]
 
     with open(outFile, 'w') as fout:
         #sub and total comments in sub

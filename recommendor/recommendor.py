@@ -16,6 +16,8 @@ import decimal
 
 # Program input: program_name username k n
 # k and n is optional and only applicable to program "two"
+# program "one"  utilizes Distributed Cache Strategy
+# program "two" utilizes All Pairs Strategy
 
 
 # Get a user
