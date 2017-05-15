@@ -34,14 +34,13 @@ public class SimilarityMapper extends Mapper<LongWritable, Text, Text, Text> {
 	String[] training_vector_list = null;
 
 	/**
-	 * We compute the inner product of feature vector of every hashtag with that
-	 * of #job
+	 * We compute the inner product of every test user will all of the training user vectors
 	 */
 	@Override
 	protected void map(LongWritable key, Text value, Context context)
 			throws IOException, InterruptedException {
 		String line = value.toString();
-		String[] test_featureVector = line.split(";", 2);
+		String[] test_featureVector = line.split("\t", 2);
 
 		String test_username = test_featureVector[0];
 		HashMap<String, Integer> test_subreddits_map = parseFeatureVector(test_featureVector[1]);
@@ -56,7 +55,7 @@ public class SimilarityMapper extends Mapper<LongWritable, Text, Text, Text> {
 
 		for(String s: training_vector_list){
 			
-			training_featureVector = s.split(";", 2);
+			training_featureVector = s.split("\t", 2);
 			training_username = training_featureVector[0];
 			training_subreddits = training_featureVector[1];
 			training_subreddits_map = parseFeatureVector(training_featureVector[1]);
@@ -119,10 +118,10 @@ public class SimilarityMapper extends Mapper<LongWritable, Text, Text, Text> {
 	 */
 	private HashMap<String, Integer> parseFeatureVector(String featureVector) {
 		HashMap<String, Integer> featureMap = new HashMap<String, Integer>();
-		String[] features = featureVector.split(",");
+		String[] features = featureVector.split(";");
 		for (String feature : features) {
-			// String[] word_count = feature.split(":");
-			featureMap.put(feature, 1);
+			String[] feature_affinity = feature.split(",");
+			featureMap.put(feature_affinity[0], 1);
 		}
 		return featureMap;
 	}

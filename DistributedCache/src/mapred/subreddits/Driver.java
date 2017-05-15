@@ -39,7 +39,7 @@ public class Driver {
 		//File fv_file = new File(trainingInput);
 
 		//if locally, replace inStream with fv_file
- 	 	//String trainingUsers = null;
+ 	 	String trainingUsers = null;
  	 	//String trainingUsers = new Scanner(inStream).useDelimiter("\\Z").next();
 
 		getRedditSimilarities(trainingInput, testInput, output);
@@ -53,7 +53,7 @@ public class Driver {
 		Configuration conf = new Configuration();
 		DistributedCache.addCacheFile(new Path(fv_path).toUri(), conf);
 		System.out.println("Added file to cache");
-		//conf.set("userVectors", userVectors);
+		//conf.set("userVectors", trainingUsers); for using conf, pass training users from main function
 		
 		Optimizedjob job = new Optimizedjob(conf, input, output,
 				"Get similarities between all subreddits");
