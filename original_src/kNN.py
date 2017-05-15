@@ -1,4 +1,5 @@
 #! /usr/bin/env python
+# code taken from https://github.com/logicx24/SubredditRecommendationEngine
 
 import math
 from mongo import *
