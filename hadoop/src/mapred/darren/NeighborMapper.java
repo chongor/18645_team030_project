@@ -1,5 +1,6 @@
 package mapred.darren;
 
+import org.apache.hadoop.io.DoubleWritable;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Mapper;
@@ -48,9 +49,10 @@ public class NeighborMapper extends Mapper<LongWritable, Text, Text, Text>{
             // Partial distance calculation
             double sum = firstScore + secondScore;
             double distance = sum * sum;
+            String distString = new BigDecimal(distance).toPlainString();
 
             // Write the finalKey and partial distance
-            context.write(new Text(finalKey), new Text(new BigDecimal(distance).toPlainString()));
+            context.write(new Text(finalKey), new Text(distString));
         }
 
 

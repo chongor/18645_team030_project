@@ -21,8 +21,6 @@ public class Driver {
         //run the two jobs to get reddit neighborhood
         getSubs(input, tmpdir + "/subs");
         getNeighborhood(tmpdir + "/subs", output);
-
-
     }
 
     private static void getSubs(String input, String output) throws Exception {
@@ -35,7 +33,7 @@ public class Driver {
     private static void getNeighborhood(String input, String output) throws Exception {
         EasyJob ejob = new EasyJob(new Configuration(), input, output, "Get Neighborhood of User pairs");
         ejob.setClasses(NeighborMapper.class, NeighborReducer.class, null);
-        ejob.setMapOutputClasses(Text.class, DoubleWritable.class);
+        ejob.setMapOutputClasses(Text.class, Text.class);
         ejob.run();
     }
 

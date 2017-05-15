@@ -2,10 +2,13 @@
 # Test framework to test recommendation engines
 
 import sys
-from src import comments, dataset, kNN, loadData, mongo
+
+# load our own code and logix's
+from src import *
+from recommendor import *
 
 # Input format is follows:
-# python accuracyTester [number] [input filename] [output filename]
+# python accuracyTester [number] [input filename]
 # output filename is optional
 
 # Take in a test file to run on a recommendation engine
@@ -24,31 +27,62 @@ def setup():
 
     return [inFile, outFile]
 
-def logicxCode(files):
-    return None
 
-def aliCode(files):
-    return None
+def logixCode(inputFile):
+    program_name = "logix"
+    util.start_time(program_name)
 
-def darrenCode(files):
-    return None
+    total = 0
+    success = 0
+
+    with open(inFile, 'r') as fin:
+        for line in fin:
+
+
+
+    util.end_time(program_name)
+
+
+def aliCode(inputFile):
+    program_name = "ali's implementation"
+    util.start_time(program_name)
+
+
+
+    util.end_time(program_name)
+
+
+def darrenCode(inputFile):
+    program_name = "darren's implementation"
+    util.start_time(program_name)
+
+
+
+    util.end_time(program_name)
+
 
 def main():
     # files = [infile, outfile]
     # infile => input filename
     # outfile => output filename
-    files = setup()
+    inputFile = setup()
 
     program = sys.argv[1];
 
     #run the test on a specific program
     if(program == 0):
-        logicxCode(files)
-    #run the test on a different program
+        logixCode(files)
     elif(program == 1):
         aliCode(files)
     elif(program == 2):
         darrenCode(files)
+    #or run on all
+    elif(program == 4):
+        logixCode("user_testing_1k")
+        aliCode("user_testing_1k")
+        darrenCode("affinity_testing_1m")
+    else:
+        print("No program specified")
 
 
 if __name__ == "__main__":
